@@ -1,15 +1,19 @@
 package mk.ukim.finki.employees.service.Impl;
 
 import mk.ukim.finki.employees.model.Gender;
-import mk.ukim.finki.employees.model.Role;
 import mk.ukim.finki.employees.model.User;
+import mk.ukim.finki.employees.model.exceptions.InsufficientUserDataEnteredException;
+import mk.ukim.finki.employees.model.exceptions.InvalidActivationCodeException;
+import mk.ukim.finki.employees.model.exceptions.UsernameAlreadyExistsException;
 import mk.ukim.finki.employees.service.UserRegistrationService;
 
 import java.time.LocalDate;
 
 public class UserRegistrationServiceImpl implements UserRegistrationService {
+
+
     @Override
-    public User completeOAuthRegistration(String username, String idOAuth) {
+    public User completeOAuthRegistration(String username, String idOAuth) throws UsernameAlreadyExistsException {
         return null;
     }
 
@@ -19,7 +23,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
     }
 
     @Override
-    public User completeClientRegistration(String username, String email, String password) {
+    public User completeClientRegistration(String username, String email, String password) throws InvalidActivationCodeException {
         return null;
     }
 
@@ -34,8 +38,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
     }
 
     @Override
-    public User completeUserInformation(String name, String surname, String ssn, LocalDate dateOfBirth, Integer salary, Gender gender, Role role, String departmentName) {
+    public User completeUserInformation(String name, String surname, String ssn, LocalDate dateOfBirth, Gender gender) throws InsufficientUserDataEnteredException {
         return null;
     }
-
 }

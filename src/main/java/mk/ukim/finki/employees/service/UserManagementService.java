@@ -1,24 +1,33 @@
 package mk.ukim.finki.employees.service;
 
+import mk.ukim.finki.employees.model.Role;
+import mk.ukim.finki.employees.model.exceptions.*;
 import mk.ukim.finki.employees.model.User;
 import org.springframework.mail.SimpleMailMessage;
+
 
 public interface UserManagementService {
 
     // must log out afterwards
-    User changePassword(String oldPassword, String newPassword, String confirmNewPassword);
+    User changePassword(String username, String oldPassword, String newPassword, String confirmNewPassword)
+            throws UsernameNotFoundException, OldPasswordNotMatchedException, OldPasswordEqualsNewPasswordException,
+            PasswordNotConfirmedException;
 
-    void forgottenPasswordRequest(String username);
+    // checks if user exists in db
+    Boolean forgottenPasswordRequest(String username);
 
+    // also puts generated password in db
     String generatePassword();
 
-    SimpleMailMessage sendEmailForForgottenPassword(String username);
+    SimpleMailMessage sendEmailForForgottenPassword(String email, String generatedPassword);
 
-    User removeEmployee(String username);  // admin
+    User removeEmployee(String username) throws UsernameNotFoundException;  // admin
 
-    User changeUserRole();  // admin
+    User changeUserRole(String username, Role role) throws UsernameNotFoundException, RoleNotExistsException;  // admin
 
-    User changeEmployeeDepartment(String departmentName);  // admin
+    User changeEmployeeDepartment(String username, String departmentName)
+            throws UsernameNotFoundException, DepartmentNotExistsException;  // admin
 
-    User changeEmployeeSalary(Integer newSalary);  // manager
+    User changeEmployeeSalary(String username, Integer newSalary)
+            throws UsernameNotFoundException, SalarayNotInBoundsException;  // manager
 }
