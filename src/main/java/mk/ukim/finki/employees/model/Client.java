@@ -1,15 +1,15 @@
 package mk.ukim.finki.employees.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-//@Entity
+@Entity
+@Table(name = "clients")
 public class Client {
 
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // TO DO: not null for all

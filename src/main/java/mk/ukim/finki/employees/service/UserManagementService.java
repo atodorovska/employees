@@ -3,8 +3,6 @@ package mk.ukim.finki.employees.service;
 import mk.ukim.finki.employees.model.Role;
 import mk.ukim.finki.employees.model.exceptions.*;
 import mk.ukim.finki.employees.model.User;
-import org.springframework.mail.SimpleMailMessage;
-
 
 public interface UserManagementService {
 
@@ -13,13 +11,15 @@ public interface UserManagementService {
             throws UsernameNotFoundException, OldPasswordNotMatchedException, OldPasswordEqualsNewPasswordException,
             PasswordNotConfirmedException;
 
+    Boolean validateUsername(String username);
+
     // checks if user exists in db
-    Boolean forgottenPasswordRequest(String username);
+    void forgottenPasswordRequest(String username);
 
     // also puts generated password in db
     String generatePassword();
 
-    SimpleMailMessage sendEmailForForgottenPassword(String email, String generatedPassword);
+    // SimpleMailMessage sendEmailForForgottenPassword(String email, String generatedPassword);
 
     User removeEmployee(String username) throws UsernameNotFoundException;  // admin
 

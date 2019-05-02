@@ -5,9 +5,11 @@ import mk.ukim.finki.employees.model.Client;
 import mk.ukim.finki.employees.model.exceptions.EmailAssociatedWithUserException;
 import mk.ukim.finki.employees.model.exceptions.PasswordNotValidatedException;
 import mk.ukim.finki.employees.model.exceptions.UsernameAlreadyExistsException;
-import org.springframework.mail.SimpleMailMessage;
+
 
 import java.util.List;
+import java.util.Optional;
+
 
 public interface ClientCatalogueService {
 
@@ -15,7 +17,9 @@ public interface ClientCatalogueService {
     Client catalogueNewClient(String username, String email, String password)
             throws UsernameAlreadyExistsException, EmailAssociatedWithUserException, PasswordNotValidatedException;
 
-    Boolean validateClientData(String username, String email);
+    Boolean validateUsername(String username);
+
+    Boolean validateEmail(String email);
 
     Boolean validatePassword(String password);
 
@@ -24,7 +28,13 @@ public interface ClientCatalogueService {
     String generateActivationToken();
 
     // exceptions from SimpleMailMessage
-    SimpleMailMessage sendEmailMessage(String email, String activationCode, String activationToken);
+    // SimpleMailMessage sendEmailMessage(String email, String activationCode, String activationToken);
 
     List<Client> removeAllPostExpiration();
+
+    Optional<Client> getClientWithToken(String token);
+
+
+//    Optional<List<Client>> getAll();
+
 }

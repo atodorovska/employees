@@ -1,27 +1,28 @@
 package mk.ukim.finki.employees.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import java.util.ArrayList;
+import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
-//@Entity
+@Entity
+@Table(name = "departments")
 public class Department {
 
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // TO DO: not null for name and manager
     private String name;
-    private User manager;
+    private Long manager;
+
+    @OneToMany
     private List<User> employees;
 
-    public Department(String name, User manager) {
+    public Department(String name, Long manager, List<User> employees) {
         this.name = name;
         this.manager = manager;
-        employees = new ArrayList<>();
+        this.employees = employees;
     }
 
     public Long getId() {
@@ -36,11 +37,11 @@ public class Department {
         this.name = name;
     }
 
-    public User getManager() {
+    public Long getManager() {
         return manager;
     }
 
-    public void setManager(User manager) {
+    public void setManager(Long manager) {
         this.manager = manager;
     }
 

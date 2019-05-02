@@ -4,45 +4,108 @@ import mk.ukim.finki.employees.model.Client;
 import mk.ukim.finki.employees.model.exceptions.EmailAssociatedWithUserException;
 import mk.ukim.finki.employees.model.exceptions.PasswordNotValidatedException;
 import mk.ukim.finki.employees.model.exceptions.UsernameAlreadyExistsException;
+import mk.ukim.finki.employees.repository.jpa.ClientRepository;
+import mk.ukim.finki.employees.repository.mail.EmailSenderRepository;
 import mk.ukim.finki.employees.service.ClientCatalogueService;
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+import java.util.UUID;
 
+@Service
 public class ClientCatalogueServiceImpl implements ClientCatalogueService {
+
+    @Autowired
+    private ClientRepository clientRepository;
+
+    @Autowired
+    private EmailSenderRepository emailSenderRepository;
 
     @Override
     public Client catalogueNewClient(String username, String email, String password) throws UsernameAlreadyExistsException, EmailAssociatedWithUserException, PasswordNotValidatedException {
-        return null;
+        if(!validateUsername(username)) throw new UsernameAlreadyExistsException();
+        if(!validateEmail(email)) throw new EmailAssociatedWithUserException();
+        if(!validatePassword(password)) throw new PasswordNotValidatedException();
+
+        String activationCode = generateActivationCode();
+        String activationToken = generateActivationToken();
+
+        this.emailSenderRepository.sendRegistrationEmail(email, activationCode, activationToken);
+        return this.clientRepository.save(new Client(username, email, password, LocalDateTime.now(), activationCode, activationToken));
     }
 
     @Override
-    public Boolean validateClientData(String username, String email) {
-        return null;
+    public Boolean validateUsername(String username) {
+        if(this.clientRepository.findByUsername(username) != null) return false;
+        return true;
     }
+
+    @Override
+    public Boolean validateEmail(String email) {
+        if(this.clientRepository.findByEmail(email) != null) return false;
+        return true;
+    }
+
 
     @Override
     public Boolean validatePassword(String password) {
-        return null;
+
+        if(password.length() < 8) return false;
+
+        char[] passSequence = password.toCharArray();
+        boolean oneLetter = false;
+        boolean oneDigit = false;
+
+        for(char c : passSequence){
+            if(Character.isAlphabetic(c)) oneLetter = true;
+            if(Character.isDigit(c)) oneDigit = true;
+        }
+
+        if(oneDigit && oneLetter) return true;
+        return false;
     }
 
     @Override
     public String generateActivationCode() {
-        return null;
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        Random random = new Random();
+
+        for(int i=0; i<7; i++){
+            stringBuilder.append((char) random.nextInt(127));
+        }
+
+        return stringBuilder.toString();
     }
 
     @Override
-    public String generateActivationToken() {
-        return null;
+    public String generateActivationToken(){
+
+        String path = "http://localhost:8080/confirm-account?token=";
+
+        return path + UUID.randomUUID().toString();
     }
 
-    @Override
-    public SimpleMailMessage sendEmailMessage(String email, String activationCode, String activationToken) {
-        return null;
-    }
-
+    // TO DO: Scheduler task for clients
     @Override
     public List<Client> removeAllPostExpiration() {
         return null;
     }
+
+    @Override
+    public Optional<Client> getClientWithToken(String token) {
+        return Optional.of(this.clientRepository.findByActivationToken(token));
+    }
+
+//    @Override
+//    public Optional<List<Client>> getAll() {
+//        return Optional.of(this.clientRepository.findAll());
+//    }
+
+
 }

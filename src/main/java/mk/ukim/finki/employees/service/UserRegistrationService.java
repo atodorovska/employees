@@ -8,15 +8,18 @@ import mk.ukim.finki.employees.model.exceptions.UsernameAlreadyExistsException;
 
 import java.time.LocalDate;
 
+
 public interface UserRegistrationService {
 
     User completeOAuthRegistration(String username, String idOAuth) throws UsernameAlreadyExistsException;
 
     Boolean validateOAuthRegistration(String username);
 
+    Boolean validateUsername(String username);
+
     User completeClientRegistration(String username, String email, String password) throws InvalidActivationCodeException;
 
-    Boolean validateClientActivation(String activationToken, String activationCode);
+    Boolean validateClientActivation(String username, String activationToken, String activationCode);
 
     String encodeUserPassword(String password);
 

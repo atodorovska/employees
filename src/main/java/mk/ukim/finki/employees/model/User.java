@@ -1,15 +1,15 @@
 package mk.ukim.finki.employees.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
-//@Entity
+@Entity
+@Table(name = "users")
 public class User {
 
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     // TO DO: not null for username, name, surname, ss, dateOfBirth, gender, salary, role, departmentName
@@ -24,9 +24,15 @@ public class User {
     private Gender gender;
     private Integer salary;
     private Role role;
-    private String departmentName;
+    private Long departmentId;
 
-    public User(String username, String idOAuth, String name, String surname, String ssn, LocalDate dateOfBirth, Gender gender, Integer salary, Role role, String departmentName) {
+    public User(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
+    public User(String username, String idOAuth, String name, String surname, String ssn, LocalDate dateOfBirth, Gender gender, Integer salary, Role role, Long departmentId) {
         this.username = username;
         this.idOAuth = idOAuth;
         this.name = name;
@@ -36,10 +42,10 @@ public class User {
         this.gender = gender;
         this.salary = salary;
         this.role = role;
-        this.departmentName = departmentName;
+        this.departmentId = departmentId;
     }
 
-    public User(String username, String email, String password, String name, String surname, String ssn, LocalDate dateOfBirth, Gender gender, Integer salary, Role role, String departmentName) {
+    public User(String username, String email, String password, String name, String surname, String ssn, LocalDate dateOfBirth, Gender gender, Integer salary, Role role, Long departmentId) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -50,7 +56,7 @@ public class User {
         this.gender = gender;
         this.salary = salary;
         this.role = role;
-        this.departmentName = departmentName;
+        this.departmentId = departmentId;
     }
 
     public Long getId() {
@@ -145,12 +151,12 @@ public class User {
         this.role = role;
     }
 
-    public String getDepartmentName() {
-        return departmentName;
+    public Long getDepartmentId() {
+        return departmentId;
     }
 
-    public void setDepartmentName(String departmentName) {
-        this.departmentName = departmentName;
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
     }
 
     @Override
