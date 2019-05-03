@@ -14,7 +14,7 @@ public interface UserManagementService {
     Boolean validateUsername(String username);
 
     // checks if user exists in db
-    void forgottenPasswordRequest(String username);
+    void forgottenPasswordRequest(String username) throws UsernameNotFoundException;
 
     // also puts generated password in db
     String generatePassword();
@@ -23,11 +23,13 @@ public interface UserManagementService {
 
     User removeEmployee(String username) throws UsernameNotFoundException;  // admin
 
-    User changeUserRole(String username, Role role) throws UsernameNotFoundException, RoleNotExistsException;  // admin
+    User changeUserRole(String username, Role role) throws UsernameNotFoundException;  // admin
 
     User changeEmployeeDepartment(String username, String departmentName)
-            throws UsernameNotFoundException, DepartmentNotExistsException;  // admin
+            throws UsernameNotFoundException;  // admin
 
     User changeEmployeeSalary(String username, Integer newSalary)
             throws UsernameNotFoundException, SalarayNotInBoundsException;  // manager
+
+    Boolean checkSalaryInBounds(Integer salary, Integer lowerBound, Integer upperBound);
 }

@@ -16,6 +16,8 @@ import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.util.Random;
 
+
+// DONE, ONE METHOD
 @Service
 public class UserRegistrationServiceImpl implements UserRegistrationService {
 
@@ -25,6 +27,8 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
     @Autowired
     private ClientRepository clientRepository;
 
+
+    // TO DO: OAUTH
 
     @Override
     public User completeOAuthRegistration(String username, String idOAuth) throws UsernameAlreadyExistsException {
@@ -36,14 +40,20 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
         return null;
     }
 
+
+
     @Override
     public Boolean validateUsername(String username) {
         if(this.userRepository.findByUsername(username) == null) return false;
         return true;
     }
 
+
     @Override
-    public User completeClientRegistration(String username, String email, String password) throws InvalidActivationCodeException {
+    public User completeClientRegistration(String username, String email, String password, String activationToken, String activationCode ) {
+
+        if(validateClientActivation(username, activationToken, activationCode))
+            this.userRepository.save(new User(username, email, encodeUserPassword(password)));
         return null;
     }
 
@@ -54,7 +64,6 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
         if(!clientToRegister.getActivationCode().equals(activationCode)) return false;
         if(!clientToRegister.getActivationToken().equals(activationToken)) return false;
 
-        this.userRepository.save(new User(clientToRegister.getUsername(), clientToRegister.getEmail(), clientToRegister.getPassword()));
         return true;
     }
 

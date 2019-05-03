@@ -17,7 +17,7 @@ public interface UserRegistrationService {
 
     Boolean validateUsername(String username);
 
-    User completeClientRegistration(String username, String email, String password) throws InvalidActivationCodeException;
+    User completeClientRegistration(String username, String email, String password, String activationToken, String activationCode );
 
     Boolean validateClientActivation(String username, String activationToken, String activationCode);
 

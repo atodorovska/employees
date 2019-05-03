@@ -8,13 +8,16 @@ import mk.ukim.finki.employees.repository.jpa.ClientRepository;
 import mk.ukim.finki.employees.repository.mail.EmailSenderRepository;
 import mk.ukim.finki.employees.service.ClientCatalogueService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ClientCatalogueServiceImpl implements ClientCatalogueService {
@@ -91,11 +94,17 @@ public class ClientCatalogueServiceImpl implements ClientCatalogueService {
         return path + UUID.randomUUID().toString();
     }
 
+
     // TO DO: Scheduler task for clients
     @Override
-    public List<Client> removeAllPostExpiration() {
-        return null;
+    @Scheduled(cron = "0 0 2 * * *")
+    public void removeAllPostExpiration() {
+
+        this.clientRepository.findAll().stream()
+                .filter(i -> i.getTimestamp().toLocalTime().isBefore(LocalTime.now().minusHours(24)))
+                .forEach(j -> this.clientRepository.delete(j));
     }
+
 
     @Override
     public Optional<Client> getClientWithToken(String token) {

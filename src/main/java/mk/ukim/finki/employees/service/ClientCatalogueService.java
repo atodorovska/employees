@@ -30,7 +30,7 @@ public interface ClientCatalogueService {
     // exceptions from SimpleMailMessage
     // SimpleMailMessage sendEmailMessage(String email, String activationCode, String activationToken);
 
-    List<Client> removeAllPostExpiration();
+    void removeAllPostExpiration();
 
     Optional<Client> getClientWithToken(String token);
 
