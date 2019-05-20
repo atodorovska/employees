@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class ClientCatalogueServiceImpl implements ClientCatalogueService {
@@ -29,7 +28,7 @@ public class ClientCatalogueServiceImpl implements ClientCatalogueService {
     private EmailSenderRepository emailSenderRepository;
 
     @Override
-    public Client catalogueNewClient(String username, String email, String password) throws UsernameAlreadyExistsException, EmailAssociatedWithUserException, PasswordNotValidatedException {
+    public Optional<Client> catalogueNewClient(String username, String email, String password) throws UsernameAlreadyExistsException, EmailAssociatedWithUserException, PasswordNotValidatedException {
         if(!validateUsername(username)) throw new UsernameAlreadyExistsException();
         if(!validateEmail(email)) throw new EmailAssociatedWithUserException();
         if(!validatePassword(password)) throw new PasswordNotValidatedException();
@@ -38,7 +37,8 @@ public class ClientCatalogueServiceImpl implements ClientCatalogueService {
         String activationToken = generateActivationToken();
 
         this.emailSenderRepository.sendRegistrationEmail(email, activationCode, activationToken);
-        return this.clientRepository.save(new Client(username, email, password, LocalDateTime.now(), activationCode, activationToken));
+
+        return Optional.of(this.clientRepository.save(new Client(username, email, password, LocalDateTime.now(), activationCode, activationToken)));
     }
 
     @Override
@@ -89,13 +89,10 @@ public class ClientCatalogueServiceImpl implements ClientCatalogueService {
     @Override
     public String generateActivationToken(){
 
-        String path = "http://localhost:8080/confirm-account?token=";
-
-        return path + UUID.randomUUID().toString();
+        return UUID.randomUUID().toString();
     }
 
 
-    // TO DO: Scheduler task for clients
     @Override
     @Scheduled(cron = "0 0 2 * * *")
     public void removeAllPostExpiration() {
@@ -107,14 +104,9 @@ public class ClientCatalogueServiceImpl implements ClientCatalogueService {
 
 
     @Override
-    public Optional<Client> getClientWithToken(String token) {
-        return Optional.of(this.clientRepository.findByActivationToken(token));
+    public Optional<List<Client>> getAll() {
+        return Optional.of(this.clientRepository.findAll());
     }
-
-//    @Override
-//    public Optional<List<Client>> getAll() {
-//        return Optional.of(this.clientRepository.findAll());
-//    }
 
 
 }

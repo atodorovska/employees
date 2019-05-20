@@ -4,10 +4,12 @@ import mk.ukim.finki.employees.model.Role;
 import mk.ukim.finki.employees.model.exceptions.*;
 import mk.ukim.finki.employees.model.User;
 
+import java.util.Optional;
+
 public interface UserManagementService {
 
     // must log out afterwards
-    User changePassword(String username, String oldPassword, String newPassword, String confirmNewPassword)
+    Optional<User> changePassword(String username, String oldPassword, String newPassword, String confirmNewPassword)
             throws UsernameNotFoundException, OldPasswordNotMatchedException, OldPasswordEqualsNewPasswordException,
             PasswordNotConfirmedException;
 

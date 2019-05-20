@@ -12,13 +12,15 @@ public class Client {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // TO DO: not null for all
     private String username;
     private String email;
     private String password;
     private LocalDateTime timestamp;
     private String activationCode;
     private String activationToken;
+
+    public Client() {
+    }
 
     public Client(String username, String email, String password, LocalDateTime timestamp, String activationCode, String activationToken) {
         this.username = username;

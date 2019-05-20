@@ -12,7 +12,6 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // TO DO: not null for username, name, surname, ss, dateOfBirth, gender, salary, role, departmentName
     private String username;
     private String email;
     private String password;
@@ -26,10 +25,19 @@ public class User {
     private Role role;
     private Long departmentId;
 
+    public User() {
+    }
+
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.role = Role.EMPLOYEE;
+    }
+
+    public User(String idOAuth){
+        this.idOAuth = idOAuth;
+        this.role = Role.EMPLOYEE;
     }
 
     public User(String username, String idOAuth, String name, String surname, String ssn, LocalDate dateOfBirth, Gender gender, Integer salary, Role role, Long departmentId) {

@@ -21,9 +21,9 @@ public class EmailSenderRepositoryImpl implements EmailSenderRepository{
 
         simpleMailMessage.setTo(to);
         simpleMailMessage.setSubject("Complete Registration!");
-        simpleMailMessage.setFrom("company@gmail.com");
-        simpleMailMessage.setText("To confirm your account, please click here : "
-                +"http://localhost:8082/confirm-account?token="+activationToken);
+        simpleMailMessage.setText("To confirm your account, please click here:   " +
+                "http://localhost:8080/api/users/registration?token="
+                +activationToken + "   and the code you need to enter is: " + activationCode);
 
         javaMailSender.send(simpleMailMessage);
     }
@@ -35,7 +35,6 @@ public class EmailSenderRepositoryImpl implements EmailSenderRepository{
 
         simpleMailMessage.setTo(to);
         simpleMailMessage.setSubject("Password Recovery");
-        simpleMailMessage.setFrom("company@gmail.com");
         simpleMailMessage.setText("Your new password is     : " + newPassword);
 
         javaMailSender.send(simpleMailMessage);

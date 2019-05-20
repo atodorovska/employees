@@ -1,28 +1,42 @@
 package mk.ukim.finki.employees.service;
 
+import mk.ukim.finki.employees.model.Client;
 import mk.ukim.finki.employees.model.Gender;
-import mk.ukim.finki.employees.model.exceptions.InsufficientUserDataEnteredException;
-import mk.ukim.finki.employees.model.exceptions.InvalidActivationCodeException;
+import mk.ukim.finki.employees.model.Role;
 import mk.ukim.finki.employees.model.User;
-import mk.ukim.finki.employees.model.exceptions.UsernameAlreadyExistsException;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 
 public interface UserRegistrationService {
 
-    User completeOAuthRegistration(String username, String idOAuth) throws UsernameAlreadyExistsException;
+    // a user is registered with username, email, password
+    // or with idOAuth
 
-    Boolean validateOAuthRegistration(String username);
+    // then they are redirected to a page where they must enter additional info, so that all that is kept
+
+    // but if you chose to register with email, you sign in like that
+
+    // else you sing in with oauth
+
+    Optional<User> completeOAuthRegistration(String idOAuth);
 
     Boolean validateUsername(String username);
 
-    User completeClientRegistration(String username, String email, String password, String activationToken, String activationCode );
+    Boolean validateOAuth(String idOAuth);
 
-    Boolean validateClientActivation(String username, String activationToken, String activationCode);
+    Optional<User> completeClientRegistration(String activationToken, String activationCode);
+
+    Boolean validateClientActivation(String username, String activationCode);
 
     String encodeUserPassword(String password);
 
-    User completeUserInformation(String name, String surname, String ssn, LocalDate dateOfBirth, Gender gender)
-            throws InsufficientUserDataEnteredException;
+    Client validateClientToken(String token);
+
+    Optional<User> detailsOAuth(String idOAuth, String username, String name, String surname, String ssn,
+                                LocalDate dateOfBirth, Gender gender, Integer salary, Role role, Long departmentId);
+
+    Optional<User> detailsAuthentication(String username, String name, String surname, String ssn,
+                                         LocalDate dateOfBirth, Gender gender, Integer salary, Role role, Long departmentId);
 }

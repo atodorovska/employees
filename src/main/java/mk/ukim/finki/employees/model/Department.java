@@ -12,12 +12,14 @@ public class Department {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // TO DO: not null for name and manager
     private String name;
     private Long manager;
 
     @OneToMany
     private List<User> employees;
+
+    public Department() {
+    }
 
     public Department(String name, Long manager, List<User> employees) {
         this.name = name;

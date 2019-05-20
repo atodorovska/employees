@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface ClientCatalogueService {
 
     // creates new Client from this data and adds timestamp, token, code
-    Client catalogueNewClient(String username, String email, String password)
+    Optional<Client> catalogueNewClient(String username, String email, String password)
             throws UsernameAlreadyExistsException, EmailAssociatedWithUserException, PasswordNotValidatedException;
 
     Boolean validateUsername(String username);
@@ -27,14 +27,8 @@ public interface ClientCatalogueService {
 
     String generateActivationToken();
 
-    // exceptions from SimpleMailMessage
-    // SimpleMailMessage sendEmailMessage(String email, String activationCode, String activationToken);
-
     void removeAllPostExpiration();
 
-    Optional<Client> getClientWithToken(String token);
-
-
-//    Optional<List<Client>> getAll();
+    Optional<List<Client>> getAll();
 
 }

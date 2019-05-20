@@ -11,9 +11,9 @@ import mk.ukim.finki.employees.service.UserManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Random;
 
-// DONE
 @Service
 public class UserManagementServiceImpl implements UserManagementService {
 
@@ -27,7 +27,7 @@ public class UserManagementServiceImpl implements UserManagementService {
     private EmailSenderRepository emailSenderRepository;
 
     @Override
-    public User changePassword(String username, String oldPassword, String newPassword, String confirmNewPassword) throws UsernameNotFoundException, OldPasswordEqualsNewPasswordException, PasswordNotConfirmedException {
+    public Optional<User> changePassword(String username, String oldPassword, String newPassword, String confirmNewPassword) throws UsernameNotFoundException, OldPasswordEqualsNewPasswordException, PasswordNotConfirmedException {
         if(!validateUsername(username)) throw new UsernameNotFoundException();
         if(oldPassword.equals(newPassword)) throw new OldPasswordEqualsNewPasswordException();
         if(!newPassword.equals(confirmNewPassword)) throw new PasswordNotConfirmedException();
@@ -36,7 +36,7 @@ public class UserManagementServiceImpl implements UserManagementService {
         this.userRepository.delete(user);
         user.setPassword(newPassword);
         this.userRepository.save(user);
-        return user;
+        return Optional.of(user);
     }
 
     @Override
