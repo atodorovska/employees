@@ -27,6 +27,8 @@ public class UserRegistrationController {
         if (this.userRegistrationService.validateClientToken(token)!= null) {
             Cookie cookie = new Cookie("token", token);
             response.addCookie(cookie);
+
+            // TO GO TO CLIENT PAGE FOR ACTIVATION
             response.sendRedirect("http://localhost:8080/api/users/registration/activation");
         }
     }

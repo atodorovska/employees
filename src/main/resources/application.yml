@@ -18,8 +18,8 @@ spring:
           connectiontimeout: 5000
           timeout: 5000
           writetimeout: 5000
-      username: 6semestar@gmail.com
-      password: evanateana
+    username: 6semestar@gmail.com
+    password: evanateana
   main:
     allow-bean-definition-overriding: true
 security:

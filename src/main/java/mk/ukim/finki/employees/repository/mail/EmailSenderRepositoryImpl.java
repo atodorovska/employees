@@ -22,7 +22,7 @@ public class EmailSenderRepositoryImpl implements EmailSenderRepository{
         simpleMailMessage.setTo(to);
         simpleMailMessage.setSubject("Complete Registration!");
         simpleMailMessage.setText("To confirm your account, please click here:   " +
-                "http://localhost:8080/api/users/registration?token="
+                "http://localhost:8080/api/users/registration/token?token="
                 +activationToken + "   and the code you need to enter is: " + activationCode);
 
         javaMailSender.send(simpleMailMessage);

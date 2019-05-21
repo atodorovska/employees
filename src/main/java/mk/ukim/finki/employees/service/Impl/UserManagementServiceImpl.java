@@ -11,6 +11,7 @@ import mk.ukim.finki.employees.service.UserManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -25,6 +26,46 @@ public class UserManagementServiceImpl implements UserManagementService {
 
     @Autowired
     private EmailSenderRepository emailSenderRepository;
+
+    @Override
+    public Optional<List<User>> getAllUsers() {
+        return Optional.of(this.userRepository.findAll());
+    }
+
+    @Override
+    public Optional<List<User>> getAllUsersOfDepartment(Long departmentId) {
+        return Optional.of(this.userRepository.findAllByDepartmentId(departmentId));
+    }
+
+    @Override
+    public Optional<User> getUserWithUsername(String username) {
+        return Optional.of(this.userRepository.findByUsername(username));
+    }
+
+    @Override
+    public Optional<User> getUserById(Long id) {
+        return this.userRepository.findById(id);
+    }
+
+    @Override
+    public Optional<List<User>> getUserWithSearchUsername(String search) {
+        return Optional.of(this.userRepository.findAllByUsernameContainingIgnoreCase(search));
+    }
+
+    @Override
+    public Optional<List<User>> getUserWithSearchName(String search) {
+        return Optional.of(this.userRepository.findAllByNameContainingIgnoreCase(search));
+    }
+
+    @Override
+    public Optional<List<User>> getUserWithSearchSurname(String search) {
+        return Optional.of(this.userRepository.findAllBySurnameContainingIgnoreCase(search));
+    }
+
+    @Override
+    public Optional<List<User>> getUserWithSearchSalary(Integer search) {
+        return Optional.of(this.userRepository.findAllBySalaryLessThanEqual(search));
+    }
 
     @Override
     public Optional<User> changePassword(String username, String oldPassword, String newPassword, String confirmNewPassword) throws UsernameNotFoundException, OldPasswordEqualsNewPasswordException, PasswordNotConfirmedException {

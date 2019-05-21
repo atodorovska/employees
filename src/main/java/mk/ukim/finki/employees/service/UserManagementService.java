@@ -4,9 +4,28 @@ import mk.ukim.finki.employees.model.Role;
 import mk.ukim.finki.employees.model.exceptions.*;
 import mk.ukim.finki.employees.model.User;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserManagementService {
+
+    // crud methods
+
+    Optional<List<User>> getAllUsers();
+
+    Optional<List<User>> getAllUsersOfDepartment(Long departmentId);
+
+    Optional<User> getUserWithUsername(String username);
+
+    Optional<User> getUserById(Long id);
+
+    Optional<List<User>> getUserWithSearchUsername(String search);
+
+    Optional<List<User>> getUserWithSearchName(String search);
+
+    Optional<List<User>> getUserWithSearchSurname(String search);
+
+    Optional<List<User>> getUserWithSearchSalary(Integer search);
 
     // must log out afterwards
     Optional<User> changePassword(String username, String oldPassword, String newPassword, String confirmNewPassword)
