@@ -4,12 +4,14 @@ import mk.ukim.finki.employees.model.Client;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
 
-    Client findByActivationToken(String token);
+    Optional<Client> findByActivationToken(String token);
 
-    Client findByUsername(String username);
+    Optional<Client> findByUsername(String username);
 
-    Client findByEmail(String email);
+    Optional<Client> findByEmail(String email);
 }

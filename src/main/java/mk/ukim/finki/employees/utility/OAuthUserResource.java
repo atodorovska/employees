@@ -1,4 +1,4 @@
-package mk.ukim.finki.employees.config;
+package mk.ukim.finki.employees.utility;
 
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;

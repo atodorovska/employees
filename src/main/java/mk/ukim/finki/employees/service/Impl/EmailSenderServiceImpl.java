@@ -4,7 +4,7 @@ import mk.ukim.finki.employees.repository.mail.EmailSenderRepository;
 import mk.ukim.finki.employees.service.EmailSenderService;
 import org.springframework.stereotype.Service;
 
-// TO DO: If we have to send emails through controller
+// todo: see if ever used, if not delete the entire service
 
 @Service
 public class EmailSenderServiceImpl implements EmailSenderService {

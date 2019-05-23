@@ -5,22 +5,23 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    User findByUsername(String username);
+    Optional<User> findByUsername(String username);
 
-    User findByIdOAuth(String idOAuth);
+    Optional<User> findByIdOAuth(String idOAuth);
 
-    List<User> findAllByDepartmentId(Long department);
+    Optional<List<User>> findAllByDepartmentId(Long department);
 
-    List<User> findAllByUsernameContainingIgnoreCase(String s);
+    Optional<List<User>> findAllByUsernameContainingIgnoreCase(String s);
 
-    List<User> findAllByNameContainingIgnoreCase(String s);
+    Optional<List<User>> findAllByNameContainingIgnoreCase(String s);
 
-    List<User> findAllBySurnameContainingIgnoreCase(String s);
+    Optional<List<User>> findAllBySurnameContainingIgnoreCase(String s);
 
-    List<User> findAllBySalaryLessThanEqual(Integer salary);
+    Optional<List<User>> findAllBySalaryLessThanEqual(Integer salary);
 
 }

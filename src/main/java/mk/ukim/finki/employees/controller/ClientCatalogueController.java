@@ -21,7 +21,7 @@ public class ClientCatalogueController {
     @Autowired
     private ClientCatalogueService clientCatalogueService;
 
-    // TO BE REMOVED -- TEST ONLY
+    // todo: change this method, if not needed delete it
     @GetMapping("/all")
     public ResponseEntity<List<Client>> getAll(){
         return this.clientCatalogueService.getAll().map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());

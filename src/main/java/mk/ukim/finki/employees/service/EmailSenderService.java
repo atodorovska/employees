@@ -2,7 +2,8 @@ package mk.ukim.finki.employees.service;
 
 import org.springframework.mail.SimpleMailMessage;
 
-// TO DO: If we have to send emails through controller
+
+// todo: see if ever used, if not delete
 
 public interface EmailSenderService {
 

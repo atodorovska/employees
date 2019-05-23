@@ -34,12 +34,12 @@ public class UserManagementServiceImpl implements UserManagementService {
 
     @Override
     public Optional<List<User>> getAllUsersOfDepartment(Long departmentId) {
-        return Optional.of(this.userRepository.findAllByDepartmentId(departmentId));
+        return this.userRepository.findAllByDepartmentId(departmentId);
     }
 
     @Override
     public Optional<User> getUserWithUsername(String username) {
-        return Optional.of(this.userRepository.findByUsername(username));
+        return this.userRepository.findByUsername(username);
     }
 
     @Override
@@ -49,22 +49,22 @@ public class UserManagementServiceImpl implements UserManagementService {
 
     @Override
     public Optional<List<User>> getUserWithSearchUsername(String search) {
-        return Optional.of(this.userRepository.findAllByUsernameContainingIgnoreCase(search));
+        return this.userRepository.findAllByUsernameContainingIgnoreCase(search);
     }
 
     @Override
     public Optional<List<User>> getUserWithSearchName(String search) {
-        return Optional.of(this.userRepository.findAllByNameContainingIgnoreCase(search));
+        return this.userRepository.findAllByNameContainingIgnoreCase(search);
     }
 
     @Override
     public Optional<List<User>> getUserWithSearchSurname(String search) {
-        return Optional.of(this.userRepository.findAllBySurnameContainingIgnoreCase(search));
+        return this.userRepository.findAllBySurnameContainingIgnoreCase(search);
     }
 
     @Override
     public Optional<List<User>> getUserWithSearchSalary(Integer search) {
-        return Optional.of(this.userRepository.findAllBySalaryLessThanEqual(search));
+        return this.userRepository.findAllBySalaryLessThanEqual(search);
     }
 
     @Override
@@ -73,7 +73,7 @@ public class UserManagementServiceImpl implements UserManagementService {
         if(oldPassword.equals(newPassword)) throw new OldPasswordEqualsNewPasswordException();
         if(!newPassword.equals(confirmNewPassword)) throw new PasswordNotConfirmedException();
 
-        User user = this.userRepository.findByUsername(username);
+        User user = this.userRepository.findByUsername(username).get();
         this.userRepository.delete(user);
         user.setPassword(newPassword);
         this.userRepository.save(user);
@@ -82,7 +82,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 
     @Override
     public Boolean validateUsername(String username){
-        if(this.userRepository.findByUsername(username) == null) return false;
+        if(!this.userRepository.findByUsername(username).isPresent()) return false;
         return true;
     }
 
@@ -90,7 +90,7 @@ public class UserManagementServiceImpl implements UserManagementService {
     public void forgottenPasswordRequest(String username) throws UsernameNotFoundException{
 
         if(!validateUsername(username)) throw new UsernameNotFoundException();
-        this.emailSenderRepository.sendPasswordRecoveryEmail(this.userRepository.findByUsername(username).getEmail(),generatePassword());
+        this.emailSenderRepository.sendPasswordRecoveryEmail(this.userRepository.findByUsername(username).get().getEmail(),generatePassword());
     }
 
     @Override
@@ -111,7 +111,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 
         if(!validateUsername(username)) throw new UsernameNotFoundException();
 
-        User user = this.userRepository.findByUsername(username);
+        User user = this.userRepository.findByUsername(username).get();
         this.userRepository.delete(user);
         return user;
     }
@@ -121,7 +121,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 
         if(!validateUsername(username)) throw new UsernameNotFoundException();
 
-        User user = this.userRepository.findByUsername(username);
+        User user = this.userRepository.findByUsername(username).get();
         this.userRepository.delete(user);
         user.setRole(role);
         this.userRepository.save(user);
@@ -133,9 +133,9 @@ public class UserManagementServiceImpl implements UserManagementService {
 
         if(!validateUsername(username)) throw new UsernameNotFoundException();
 
-        User user = this.userRepository.findByUsername(username);
+        User user = this.userRepository.findByUsername(username).get();
         this.userRepository.delete(user);
-        Department department = this.departmentRepository.findByName(departmentName);
+        Department department = this.departmentRepository.findByName(departmentName).get();
         user.setDepartmentId(department.getId());
         this.userRepository.save(user);
         return user;
@@ -146,7 +146,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 
         if(!validateUsername(username)) throw new UsernameNotFoundException();
 
-        User user = this.userRepository.findByUsername(username);
+        User user = this.userRepository.findByUsername(username).get();
         this.userRepository.delete(user);
 
 

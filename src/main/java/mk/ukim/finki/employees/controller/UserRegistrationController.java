@@ -28,16 +28,19 @@ public class UserRegistrationController {
             Cookie cookie = new Cookie("token", token);
             response.addCookie(cookie);
 
-            // TO GO TO CLIENT PAGE FOR ACTIVATION
+            // todo: change this -- goes to client page for activation !!!!!!!
             response.sendRedirect("http://localhost:8080/api/users/registration/activation");
         }
     }
 
+    // todo: change this method, see if needed
     @PostMapping("/activation")
     public void completeClientRegistration(HttpServletResponse response, HttpServletRequest request, @RequestBody String code) throws IOException {
 
         String token = Arrays.stream(request.getCookies()).findAny().get().getValue();
         this.userRegistrationService.completeClientRegistration(token, code);
+
+        // todo: change this -- goes to client page for my profile !!!!!!!
         response.sendRedirect("http://localhost:4200/authentication-details");
     }
 

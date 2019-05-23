@@ -18,9 +18,6 @@ public class UserManagementController {
     @Autowired
     private UserManagementService userManagementService;
 
-
-    // crud methods
-
     @GetMapping("/all")
     public ResponseEntity<List<User>> getAllUsers(){
         return this.userManagementService.getAllUsers().map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());

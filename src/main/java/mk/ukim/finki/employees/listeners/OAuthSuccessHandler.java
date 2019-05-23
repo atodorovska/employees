@@ -1,4 +1,4 @@
-package mk.ukim.finki.employees.config;
+package mk.ukim.finki.employees.listeners;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -22,7 +22,7 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
         String username = (map.get("name") != null ? map.get("name").toString() : map.get("login").toString());
         String id = (map.get("id") != null ? map.get("id").toString() : map.get("sub").toString());
 
-        // TO BE CHANGED TO CLIENT
+        // todo: change this to go to some client page -- this is once you sing in with fb git google
         response.sendRedirect("http://localhost:8080/api/clients/catalogue/all");
     }
 

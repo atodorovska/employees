@@ -27,11 +27,11 @@ public class DepartmentManagementServiceImpl implements DepartmentManagementServ
 
     @Override
     public Optional<Department> getDepartmentWithName(String name) {
-        return Optional.of(this.departmentRepository.findByName(name));
+        return this.departmentRepository.findByName(name);
     }
 
     @Override
     public Optional<List<Department>> getAllDepartmentsWithManager(Long manager) {
-        return Optional.of(this.departmentRepository.findAllByManager(manager));
+        return this.departmentRepository.findAllByManager(manager);
     }
 }

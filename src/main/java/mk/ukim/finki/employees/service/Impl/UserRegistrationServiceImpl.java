@@ -8,6 +8,8 @@ import mk.ukim.finki.employees.repository.jpa.ClientRepository;
 import mk.ukim.finki.employees.repository.jpa.UserRepository;
 import mk.ukim.finki.employees.service.UserRegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -24,6 +26,15 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 
     @Autowired
     private ClientRepository clientRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    public static void main(String[] args) {
+        UserRegistrationServiceImpl service = new UserRegistrationServiceImpl();
+        service.passwordEncoder = new BCryptPasswordEncoder();
+        System.out.println(service.encodeUserPassword("pajace123"));
+    }
 
     @Override
     public Optional<User> completeOAuthRegistration(String idOAuth) {
@@ -46,7 +57,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
     @Override
     public Optional<User> completeClientRegistration(String activationToken, String activationCode ) {
 
-        Client client = this.clientRepository.findByActivationToken(activationToken);
+        Client client = this.clientRepository.findByActivationToken(activationToken).get();
 
         if(validateClientActivation(client.getUsername(), activationCode))
             return Optional.of(this.userRepository.save(new User(client.getUsername(), client.getEmail(),
@@ -58,7 +69,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
     public Boolean validateClientActivation(String username, String activationCode) {
 
         if(!validateUsername(username)) return false;
-        Client clientToRegister = this.clientRepository.findByUsername(username);
+        Client clientToRegister = this.clientRepository.findByUsername(username).get();
 
         return (!clientToRegister.getActivationCode().equals(activationCode));
     }
@@ -66,21 +77,12 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
     @Override
     public String encodeUserPassword(String password) {
 
-        Random random = new SecureRandom();
-        String alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-
-        StringBuilder returnValue = new StringBuilder(password.length());
-
-        for (int i = 0; i < password.length(); i++) {
-            returnValue.append(alphabet.charAt(random.nextInt(alphabet.length())));
-        }
-
-        return returnValue.toString();
+        return passwordEncoder.encode(password);
     }
 
     @Override
     public Client validateClientToken(String token) {
-        return this.clientRepository.findByActivationToken(token);
+        return this.clientRepository.findByActivationToken(token).get();
     }
 
     @Override
@@ -88,7 +90,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 
         if(!validateOAuth(idOAuth)) return Optional.empty();
 
-        User user = this.userRepository.findByIdOAuth(idOAuth);
+        User user = this.userRepository.findByIdOAuth(idOAuth).get();
         this.userRepository.delete(user);
 
         user.setUsername(username);
@@ -100,7 +102,7 @@ public class UserRegistrationServiceImpl implements UserRegistrationService {
 
         if(!validateUsername(username)) return Optional.empty();
 
-        User user = this.userRepository.findByUsername(username);
+        User user = this.userRepository.findByUsername(username).get();
         this.userRepository.delete(user);
 
         return Optional.of(this.userRepository.save(user));
