@@ -43,13 +43,13 @@ public class ClientCatalogueServiceImpl implements ClientCatalogueService {
 
     @Override
     public Boolean validateUsername(String username) {
-        if(this.clientRepository.findByUsername(username) != null) return false;
+        if(this.clientRepository.findByUsername(username).isPresent()) return false;
         return true;
     }
 
     @Override
     public Boolean validateEmail(String email) {
-        if(this.clientRepository.findByEmail(email) != null) return false;
+        if(this.clientRepository.findByEmail(email).isPresent()) return false;
         return true;
     }
 

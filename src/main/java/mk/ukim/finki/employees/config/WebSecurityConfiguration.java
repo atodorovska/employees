@@ -107,6 +107,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .failureHandler((request, response, authentication) -> {
                     response.setStatus(HttpStatus.UNAUTHORIZED.value());
                 })
+                .and().rememberMe()
+                .key("uniqueRembemberMeKey").tokenValiditySeconds(2592000)
                 .and()
                 .logout()
                 .logoutUrl("/api/logout")
@@ -115,9 +117,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .logoutSuccessHandler((new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)))
                 .and()
                 .authorizeRequests()
-//                .antMatchers("/api/user").hasAnyRole("ROLE_ADMIN")
-//                .and()
-//                .authorizeRequests()
+                .antMatchers("/api/users/registration/token", "/api/users/registration/activation",
+                        "/api/users/registration/authentication-details", "/api/users/registration/oauth-details"
+                ).hasAnyRole("USER")
+                .and()
+                .authorizeRequests()
                 .antMatchers("/**", "/", "/login**", "/webjars/**", "/error**", "/api/**").permitAll();
 
     }
